@@ -1,0 +1,246 @@
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::string;
+
+struct Waktu{
+    int jam;
+    int menit;
+    int detik;
+};
+
+struct Mahasiswa{
+    string npm;
+    string nama;
+    int nilai1;
+    int nilai2;
+    int nilai3;
+    float nilaiAkhir;
+    char hurufMutu;
+    string status;
+    Waktu mulai;
+    Waktu selesai;
+    Waktu lama;
+};
+
+typedef Mahasiswa data[100];
+data mhs;
+
+void input(int &n, data &mhs){
+
+    cout<<"Jumlah mahasiswa : ";
+    cin>>n;
+
+    for(int i=0;i<n;i++){
+
+        cout<<"\nData ke "<<i+1<<"\n";
+        cout<<"NPM : "; cin>>mhs[i].npm;
+        cout<<"Nama : "; cin>>mhs[i].nama;
+        cout<<"Nilai Penguji 1 : "; cin>>mhs[i].nilai1;
+        cout<<"Nilai Penguji 2 : "; cin>>mhs[i].nilai2;
+        cout<<"Nilai Penguji 3 : "; cin>>mhs[i].nilai3;
+        cout<<"Waktu mulai (jam menit detik): "; cin>>mhs[i].mulai.jam>>mhs[i].mulai.menit>>mhs[i].mulai.detik;
+        cout<<"Waktu selesai (jam menit detik): "; cin>>mhs[i].selesai.jam>>mhs[i].selesai.menit>>mhs[i].selesai.detik;
+    }
+}
+
+void hitungNilai(int n,data &mhs){
+    for(int i=0;i<n;i++)
+    mhs[i].nilaiAkhir=(mhs[i].nilai1+mhs[i].nilai2+mhs[i].nilai3)/3.0;
+}
+
+void hitungHurufMutu(int n,data &mhs){
+
+    for(int i=0;i<n;i++){
+
+        float NA=mhs[i].nilaiAkhir;
+
+        if(NA<55) mhs[i].hurufMutu='D';
+        else if(NA<68) mhs[i].hurufMutu='C';
+        else if(NA<80) mhs[i].hurufMutu='B';
+        else mhs[i].hurufMutu='A';
+    }
+}
+
+void hitungStatus(int n,data &mhs){
+
+    for(int i=0;i<n;i++){
+
+        if(mhs[i].nilaiAkhir>=68)
+        mhs[i].status="Lulus";
+        else
+        mhs[i].status="Gagal";
+    }
+}
+
+void hitungLamaSidang(int n,data &mhs){
+
+    for(int i=0;i<n;i++){
+
+        mhs[i].lama.detik=mhs[i].selesai.detik-mhs[i].mulai.detik;
+        mhs[i].lama.menit=mhs[i].selesai.menit-mhs[i].mulai.menit;
+        mhs[i].lama.jam=mhs[i].selesai.jam-mhs[i].mulai.jam;
+
+        if(mhs[i].lama.detik<0){
+            mhs[i].lama.detik+=60;
+            mhs[i].lama.menit--;
+        }
+
+        if(mhs[i].lama.menit<0){
+            mhs[i].lama.menit+=60;
+            mhs[i].lama.jam--;
+        }
+    }
+}
+
+void sortingAscending(int n,data &mhs){
+
+    for(int i=0;i<n-1;i++)
+    for(int j=i+1;j<n;j++)
+    if(mhs[i].nilaiAkhir>mhs[j].nilaiAkhir){
+
+        Mahasiswa temp=mhs[i];
+        mhs[i]=mhs[j];
+        mhs[j]=temp;
+    }
+}
+
+void sortingDescending(int n,data &mhs){
+
+    for(int i=0;i<n-1;i++)
+    for(int j=i+1;j<n;j++)
+    if(mhs[i].nilaiAkhir<mhs[j].nilaiAkhir){
+
+        Mahasiswa temp=mhs[i];
+        mhs[i]=mhs[j];
+        mhs[j]=temp;
+    }
+}
+
+void tampil(int n,data &mhs){
+
+cout<<"\nDaftar Nilai Sidang dan Lama Sidang Program Studi TI\n";
+cout<<"No NPM Nama NA HM Mulai Selesai Lama Status\n";
+
+for(int i=0;i<n;i++){
+    cout<<i+1<<" "
+    <<mhs[i].npm<<" "
+    <<mhs[i].nama<<" "
+    <<mhs[i].nilaiAkhir<<" "
+    <<mhs[i].hurufMutu<<" "
+    <<mhs[i].mulai.jam<<":"<<mhs[i].mulai.menit<<":"<<mhs[i].mulai.detik<<" "
+    <<mhs[i].selesai.jam<<":"<<mhs[i].selesai.menit<<":"<<mhs[i].selesai.detik<<" "
+    <<mhs[i].lama.jam<<":"<<mhs[i].lama.menit<<":"<<mhs[i].lama.detik<<" "
+    <<mhs[i].status<<"\n";
+    }
+}
+
+void statistik(int n,data &mhs){
+
+    float max=mhs[0].nilaiAkhir;
+    float min=mhs[0].nilaiAkhir;
+    float total=0;
+
+    for(int i=0;i<n;i++){
+
+    if(mhs[i].nilaiAkhir>max)
+    max=mhs[i].nilaiAkhir;
+
+    if(mhs[i].nilaiAkhir<min)
+    min=mhs[i].nilaiAkhir;
+
+    total+=mhs[i].nilaiAkhir;
+}
+
+cout<<"\nRata rata Nilai Akhir : "<<total/n;
+cout<<"\nNilai Tertinggi : "<<max;
+cout<<"\nNilai Terendah : "<<min<<"\n";
+}
+
+void output(int n,data &mhs){
+
+    tampil(n,mhs);
+    statistik(n,mhs);
+
+}
+
+void searching(int n,data &mhs){
+
+    string key;
+
+    cout<<"\nCari NPM : ";
+    cin>>key;
+
+    int i=0;
+    bool ketemu=false;
+
+    while(i<n && !ketemu){
+
+        if(mhs[i].npm==key)
+        ketemu=true;
+        else
+        i++;
+}
+
+if(ketemu){
+
+    cout<<"\nData ditemukan\n";
+    cout<<"Nama : "<<mhs[i].nama;
+    cout<<"\nNilai Akhir : "<<mhs[i].nilaiAkhir<<"\n";
+}
+
+else cout<<"\nData tidak ditemukan\n";
+}
+
+void menu(){
+
+    cout<<"\nMENU\n";
+    cout<<"1 Input Data\n";
+    cout<<"2 Output Data\n";
+    cout<<"3 Sorting Ascending\n";
+    cout<<"4 Sorting Descending\n";
+    cout<<"5 Searching\n";
+    cout<<"6 Keluar\n";
+}
+
+int main(){
+
+int n=0;
+int pilih;
+
+do{
+    menu();
+    cout<<"Pilih : ";
+    cin>>pilih;
+
+    switch(pilih){
+
+    case 1:
+    input(n,mhs);
+    hitungNilai(n,mhs);
+    hitungHurufMutu(n,mhs);
+    hitungStatus(n,mhs);
+    hitungLamaSidang(n,mhs);
+    break;
+
+    case 2:
+    output(n,mhs);
+    break;
+
+    case 3:
+    sortingAscending(n,mhs);
+    break;
+
+    case 4:
+    sortingDescending(n,mhs);
+    break;
+
+    case 5:
+    searching(n,mhs);
+    break;
+
+    }
+
+}while(pilih!=6);
+
+}
