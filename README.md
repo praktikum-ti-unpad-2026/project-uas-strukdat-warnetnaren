@@ -212,10 +212,3 @@ PC 5 : Kosong
 Warnet Management System merupakan aplikasi yang dirancang untuk membantu pengelolaan pelanggan warnet secara lebih terstruktur. Dengan memanfaatkan Linked List, Priority Queue, Stack, dan Array, sistem mampu mengelola data pelanggan, mengatur antrian berdasarkan prioritas, mengelola penggunaan komputer, serta menyimpan riwayat pelanggan yang telah selesai menggunakan layanan.
 
 ---
-
-# Anggota Kelompok
-
-| NIM | Nama |
-|------|------|
-| XXXXXXXX | Nama Anggota 1 |
-| XXXXXXXX | Nama Anggota 2 |
